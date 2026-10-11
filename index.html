@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buku Kas Warga — Paguyuban Tirto Wening</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%AA%99%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green-900:#0b241a; --green-800:#0f3225; --green-700:#155238; --green-500:#1f7a4d;
+  --paper:#f6f1e3; --paper-2:#fbf7ec; --line:#d9cdb0;
+  --gold:#e9a83a; --gold-deep:#b97e14; --ok:#1e8a55; --red:#c0472f;
+  --ink:#122b20; --muted:#6d6a58;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Plus Jakarta Sans",sans-serif;color:var(--ink);background:var(--green-900);min-height:100vh}
+::selection{background:var(--gold);color:#241a05}
+button{font:inherit;cursor:pointer}
+input,select{font:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+@page{size:A4 landscape;margin:10mm}
+
+.bg-art{position:fixed;inset:0;z-index:-1;
+  background:
+    radial-gradient(1100px 560px at 88% -10%, rgba(233,168,58,.16), transparent 60%),
+    radial-gradient(900px 520px at -12% 112%, rgba(31,122,77,.4), transparent 60%),
+    var(--green-900);}
+.bg-art::after{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(rgba(246,241,227,.06) 1px, transparent 1px);
+  background-size:22px 22px;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-top:36px;padding-bottom:22px;flex-wrap:wrap}
+.brand{display:flex;gap:16px;align-items:center}
+.coin{width:58px;height:58px;flex:none;border-radius:50%;
+  background:radial-gradient(circle at 30% 25%, #ffd98a, var(--gold) 55%, #b97e14);
+  color:#3a2705;font:800 20px/58px "Bricolage Grotesque";text-align:center;
+  box-shadow:0 0 0 3px rgba(233,168,58,.25), 0 10px 22px rgba(0,0,0,.4);
+  animation:float 5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px) rotate(-5deg)}}
+.orgname{font:800 clamp(12px,1.6vw,15px) "Bricolage Grotesque";letter-spacing:.32em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.orgname::before,.orgname::after{content:"";height:1.5px;width:34px;background:rgba(233,168,58,.55)}
+h1{font-family:"Bricolage Grotesque";font-weight:800;font-size:clamp(28px,4.4vw,46px);
+  letter-spacing:-.5px;color:var(--paper);line-height:1.05}
+h1 em{font-style:normal;color:var(--gold)}
+.sub{color:#9fc0ac;font-size:14px;margin-top:4px}
+.top-right{display:flex;align-items:center;gap:16px}
+.top-col{display:grid;gap:8px;justify-items:end}
+.stamp{border:2px dashed rgba(233,168,58,.75);color:#f0c46f;padding:9px 13px;border-radius:10px;
+  font:700 11px/1.4 "Bricolage Grotesque";letter-spacing:.16em;text-align:center;
+  transform:rotate(3deg);transition:.3s;user-select:none}
+.stamp:hover{transform:rotate(-2deg) scale(1.06)}
+.today{color:#cfe3d3;font-size:13px;text-align:right;max-width:170px}
+.syncbadge{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:12px;
+  padding:7px 13px;border-radius:999px;border:1.5px dashed rgba(246,241,227,.35);
+  color:#a9c6b3;background:none;transition:.2s}
+.syncbadge:hover{transform:translateY(-1px)}
+.syncbadge.on{border-style:solid;border-color:#5fd395;color:#8fe6b6}
+.syncbadge.busy{border-style:solid;border-color:var(--gold);color:#f0c46f}
+.syncbadge.err{border-style:solid;border-color:var(--red);color:#f0937f}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block}
+.syncbadge.on .dot,.syncbadge.busy .dot{animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.3}}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);background:var(--paper);
+  border-radius:14px;overflow:hidden;box-shadow:0 22px 50px rgba(0,0,0,.4);margin-bottom:22px}
+.stat{padding:18px 22px}
+.stat + .stat{border-left:1.5px dashed var(--line)}
+.s-label{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.s-val b{display:block;font-family:"Bricolage Grotesque";font-weight:800;
+  font-size:clamp(19px,2.4vw,28px);line-height:1.1;color:var(--green-800);font-variant-numeric:tabular-nums}
+.s-val span{font-size:12px;color:var(--muted)}
+.s-val.bump{animation:bump .45s}
+@keyframes bump{30%{transform:scale(1.06)}}
+.stat.emas{background:var(--green-800)}
+.stat.emas .s-label{color:#9fc0ac}
+.stat.emas .s-val b{color:var(--gold)}
+.stat.emas .s-val span{color:#cfe3d3}
+
+.tabs{position:sticky;top:0;z-index:50;background:rgba(11,36,26,.95);
+  border-block:1px solid rgba(233,168,58,.28)}
+.tabs-in{display:flex;gap:4px;overflow-x:auto}
+.tabs button{display:flex;align-items:center;gap:9px;background:none;border:none;
+  color:#a9c6b3;padding:14px 16px;font-weight:600;font-size:13.5px;white-space:nowrap;
+  transition:.2s;border-bottom:3px solid transparent}
+.tabs button i{font:800 11px "Bricolage Grotesque";font-style:normal;color:var(--gold);
+  border:1.5px solid rgba(233,168,58,.5);border-radius:6px;padding:2px 5px}
+.tabs button:hover{color:var(--paper);transform:translateY(-1px)}
+.tabs button.active{color:var(--paper);border-bottom-color:var(--gold);background:rgba(233,168,58,.08)}
+
+main{padding:26px 20px 10px}
+.panel{display:none;background:var(--paper);border:1px solid #e6dcc2;border-radius:16px 16px 16px 4px;
+  padding:24px 26px 26px;box-shadow:0 24px 55px rgba(0,0,0,.4);margin-bottom:36px}
+.panel.active{display:block;animation:panelIn .38s ease both}
+@keyframes panelIn{from{opacity:0;transform:translateY(14px)}}
+.panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.panel h2{font-family:"Bricolage Grotesque";font-weight:800;font-size:24px;color:var(--green-900)}
+.panel h2::after{content:"";display:block;width:46px;height:4px;background:var(--gold);border-radius:2px;margin-top:6px}
+.panel h2 small{font-family:"Plus Jakarta Sans";font-size:13px;font-weight:500;color:var(--muted)}
+.muted{color:var(--muted);font-size:13px}
+
+.btn{background:var(--gold);color:#241a05;font-weight:800;border:none;padding:10px 18px;
+  border-radius:10px;box-shadow:0 3px 0 var(--gold-deep);transition:.15s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--gold-deep)}
+.btn.small{padding:7px 13px;font-size:13px}
+.btn.ghost,.ghost{background:transparent;border:2px solid rgba(18,43,32,.25);color:var(--ink);
+  box-shadow:none;border-radius:10px;padding:8px 14px;font-weight:700;transition:.15s}
+.btn.ghost:hover,.ghost:hover{border-color:var(--green-700);transform:translateY(-1px)}
+.mini{background:none;border:1.5px dashed rgba(18,43,32,.35);border-radius:8px;
+  padding:6px 11px;font-size:12px;font-weight:700;color:var(--muted);transition:.15s}
+.mini:hover{color:var(--green-800);border-color:var(--green-700)}
+.icon-btn{background:none;border:none;font-size:13px;color:#a2947a;padding:2px 6px;border-radius:7px;transition:.15s;margin-left:6px}
+.icon-btn:hover{background:rgba(192,71,47,.12);color:var(--red);transform:scale(1.1)}
+
+.search{padding:9px 14px;border-radius:9px;border:1.5px solid #cabf9f;background:#fffdf6;min-width:220px}
+.pages{display:grid;grid-template-columns:1fr 1fr;gap:8px 34px}
+.page-cap{font:700 11px "Bricolage Grotesque";letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-deep);border-bottom:2px solid var(--gold);padding-bottom:6px;margin:6px 0 4px}
+.wrow{display:grid;grid-template-columns:42px 1fr;align-items:center;gap:10px;
+  padding:6px 8px;border-bottom:1px dashed var(--line);border-left:3px solid transparent;transition:.15s}
+.wrow:hover{background:rgba(233,168,58,.1);border-left-color:var(--gold)}
+.wno{font:800 13px "Bricolage Grotesque";color:var(--gold-deep);text-align:center;
+  border:1.5px solid rgba(185,126,20,.4);border-radius:7px;padding:3px 0}
+.wnama{width:100%;background:transparent;border:none;border-bottom:1.5px dashed transparent;
+  padding:4px 2px;font-weight:600;color:var(--green-900);transition:.15s}
+.wrow:hover .wnama{border-bottom-color:#cabf9f}
+.wnama:focus{outline:none;border-bottom:2px solid var(--gold-deep)}
+
+.ctrl{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ynav{display:flex;align-items:center;gap:6px;background:#fffdf6;border:1.5px solid #cabf9f;border-radius:10px;padding:4px}
+.ynav button{border:none;background:none;font:800 18px "Bricolage Grotesque";color:var(--green-700);
+  width:30px;height:30px;border-radius:7px;transition:.15s}
+.ynav button:hover{background:var(--gold);color:#241a05}
+.ynav b{font:800 17px "Bricolage Grotesque";min-width:56px;text-align:center;font-variant-numeric:tabular-nums}
+.tarif{font-size:12px;font-weight:700;color:var(--muted);display:grid;gap:4px}
+.tarif input{padding:8px 12px;border:1.5px solid #cabf9f;border-radius:9px;background:#fffdf6;width:150px;font-weight:700}
+input:focus,select:focus{outline:none;border-color:var(--gold-deep);box-shadow:0 0 0 3px rgba(233,168,58,.25)}
+select{padding:9px 12px;border:1.5px solid #cabf9f;border-radius:9px;background:#fffdf6;font-weight:600;color:var(--green-900)}
+
+.bulan-chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 16px}
+.bchip{min-width:62px;padding:8px 6px 7px;border-radius:10px;border:1.5px solid var(--line);
+  background:var(--paper-2);display:grid;gap:2px;justify-items:center;transition:.18s}
+.bchip span{font-size:10px;font-weight:800;letter-spacing:.1em;color:#8a8060;text-transform:uppercase}
+.bchip b{font:800 16px "Bricolage Grotesque";color:var(--green-900);font-variant-numeric:tabular-nums}
+.bchip:hover{transform:translateY(-2px);border-color:var(--gold-deep)}
+.bchip.on{background:var(--green-800);border-color:var(--green-800)}
+.bchip.on span{color:#9fc0ac}.bchip.on b{color:#fff}
+.bchip.full b::after{content:" ✓";color:#5fd395;font-size:11px}
+
+.rutin-sum{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:14px}
+.rs-bulan{font:800 15px "Bricolage Grotesque";color:var(--green-700)}
+.rs-angka b{font:800 26px "Bricolage Grotesque";color:var(--green-900)}
+.bar{height:10px;border-radius:99px;background:#e3d9bd;overflow:hidden}
+.fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold),#f4c465);
+  transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.rs-uang{text-align:right;font-size:13px}
+.rs-uang b{display:block;font:800 18px "Bricolage Grotesque";color:var(--ok)}
+.rs-uang small{color:var(--muted)}
+
+.subtabs{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.subtabs .spacer{flex:1}
+.subtabs [data-sub]{border:2px solid rgba(18,43,32,.2);background:none;border-radius:999px;
+  padding:7px 16px;font-weight:700;font-size:13px;color:var(--muted);transition:.15s}
+.subtabs [data-sub].on{background:var(--green-800);border-color:var(--green-800);color:var(--paper)}
+
+.payrow{display:grid;grid-template-columns:42px 1fr auto;gap:10px;align-items:center;
+  padding:7px 10px;border-bottom:1px dashed var(--line);border-left:3px solid transparent;transition:.15s}
+.payrow:hover{background:rgba(233,168,58,.09)}
+.payrow.paid{border-left-color:var(--ok);background:rgba(30,138,85,.07)}
+.paynama{font-weight:600}
+.payrow.paid .paynama{color:var(--green-700);font-weight:700}
+.chip{border-radius:999px;padding:7px 15px;font-weight:800;font-size:11px;letter-spacing:.07em;
+  border:1.5px dashed #b7ab8a;background:transparent;color:#7a7157;transition:.18s}
+.chip.on{border-style:solid;border-color:var(--ok);background:var(--ok);color:#fff;box-shadow:0 2px 0 #14663f}
+.chip:hover{transform:translateY(-1px)}
+.chip:active{transform:scale(.93)}
+
+.table-scroll{overflow:auto;border:1px solid var(--line);border-radius:10px}
+.matrix{border-collapse:collapse;width:100%;min-width:640px}
+.matrix th,.matrix td{padding:6px 5px;text-align:center;border-bottom:1px dashed var(--line);font-size:13px}
+.matrix thead th{font:700 11px "Bricolage Grotesque";letter-spacing:.08em;color:var(--muted);
+  text-transform:uppercase;background:var(--paper-2)}
+.matrix .m-warga{text-align:left;white-space:nowrap;padding-left:12px;min-width:190px;
+  position:sticky;left:0;background:var(--paper);z-index:1;font-weight:600}
+.matrix thead .m-warga,.matrix tfoot .m-warga{background:var(--paper-2)}
+.matrix tbody tr:hover td{background:rgba(233,168,58,.08)}
+.matrix tbody tr:hover td.m-warga{background:#fdf3dd}
+td.hl{background:rgba(233,168,58,.16)}
+.m-sum{font:800 13px "Bricolage Grotesque";color:var(--gold-deep)}
+.m-foot td{background:var(--paper-2);font-weight:800;border-bottom:none}
+.cell{width:26px;height:26px;border-radius:7px;border:1.5px dashed #c4b795;background:transparent;transition:.15s}
+.cell:hover{border-color:var(--gold-deep);transform:scale(1.15)}
+.cell.on{background:var(--ok);border-style:solid;border-color:#14663f;box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+
+.inc-total{font-size:13px;color:var(--muted)}
+.inc-total b{font:800 20px "Bricolage Grotesque";color:var(--ok);display:block}
+.inc-form{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:12px;align-items:end;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:20px}
+.inc-form label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:grid;gap:5px}
+.inc-form input{padding:10px 12px;border:1.5px solid #cabf9f;border-radius:9px;background:#fffdf6;width:100%}
+.inc-list{display:grid;gap:14px}
+.ev{background:var(--paper-2);border:1px solid var(--line);border-left:5px solid var(--gold);
+  border-radius:12px;padding:16px 18px;animation:rise .45s both}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+.ev-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.ev h3{font-family:"Bricolage Grotesque";font-size:18px;color:var(--green-900)}
+.ev-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.ev-prog{display:flex;gap:14px;align-items:center;margin:12px 0}
+.ev-angka{font-size:12.5px;white-space:nowrap}
+.ev-angka b{font:800 15px "Bricolage Grotesque";color:var(--green-800)}
+.ev-toggle{margin-bottom:2px}
+.ev-toggle.open{background:var(--green-800);color:var(--paper);border-color:var(--green-800)}
+.ev-body{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:6px;margin-top:12px}
+.evchip{display:flex;gap:8px;align-items:center;padding:7px 10px;border-radius:8px;
+  border:1.5px dashed #b7ab8a;background:#fffdf6;font-size:12.5px;color:#6f6749;text-align:left;transition:.15s}
+.evchip b{font:800 12px "Bricolage Grotesque";color:#a08c3c}
+.evchip:hover{transform:translateY(-1px);border-color:var(--gold-deep)}
+.evchip.on{background:#e2f2e8;border-style:solid;border-color:var(--ok);color:var(--green-800);font-weight:700}
+.evchip.on b{color:var(--ok)}
+.kosong{text-align:center;padding:34px;color:var(--muted);border:2px dashed var(--line);border-radius:12px}
+
+.kas-form{display:grid;grid-template-columns:auto 1fr auto auto auto;gap:10px;align-items:end;
+  background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px}
+.field{display:grid;gap:5px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.field.grow{min-width:200px}
+.field input{padding:10px 12px;border:1.5px solid #cabf9f;border-radius:9px;background:#fffdf6;width:100%}
+.jgroup{display:flex;gap:6px;padding-bottom:1px}
+.jbtn{border:2px solid rgba(18,43,32,.25);background:none;border-radius:9px;padding:9px 13px;
+  font-weight:800;font-size:13px;color:var(--muted);transition:.15s}
+.jbtn:hover{transform:translateY(-1px)}
+.jbtn[data-j="masuk"].on{background:var(--ok);border-color:var(--ok);color:#fff}
+.jbtn[data-j="keluar"].on{background:var(--red);border-color:var(--red);color:#fff}
+
+.kas,.lap{border-collapse:collapse;width:100%}
+.kas th,.kas td,.lap th,.lap td{padding:8px 9px;border-bottom:1px dashed var(--line);font-size:13.5px}
+.kas th,.lap th{font:700 11px "Bricolage Grotesque";letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);text-align:left;border-bottom:2px solid var(--gold);padding:10px 9px}
+.kas .num,.lap .num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kas tr{transition:.15s}
+.kas tbody tr:hover td{background:rgba(233,168,58,.09)}
+.kas tr.auto td{background:rgba(233,168,58,.1)}
+.kas tr.auto td:first-child{border-left:3px solid var(--gold)}
+.kas tr.awal td{color:var(--muted);font-style:italic}
+.kas tfoot td,.lap tfoot td{background:var(--paper-2);font-weight:800;border-bottom:none}
+.lap tbody tr{transition:.15s}
+.lap tbody tr:hover td{background:rgba(233,168,58,.09)}
+.lap tr.kini td{background:rgba(30,138,85,.09)}
+.tag{font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-deep);
+  border:1px solid rgba(185,126,20,.5);border-radius:5px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+.in{color:var(--ok)} .out{color:var(--red)}
+.saldo{font-weight:800;color:var(--green-800)}
+.strong{font-weight:800}
+.kosong-cell{text-align:center;color:var(--muted);padding:22px!important}
+.saldo-field{display:inline-grid;gap:5px;font-size:11px;font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.saldo-field input{padding:9px 12px;border:1.5px solid #cabf9f;border-radius:9px;background:#fffdf6;width:230px;font-weight:700}
+
+.rekap{border-collapse:collapse;width:100%}
+.rekap th{font:700 11px "Bricolage Grotesque";letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-align:left;padding:10px 8px;border-bottom:2px solid var(--gold)}
+.rekap td{padding:9px 8px;border-bottom:1px dashed var(--line);font-size:14px}
+.rekap tbody tr{transition:.15s}
+.rekap tbody tr:hover{background:rgba(233,168,58,.12)}
+.rekap .num{text-align:right;font-variant-numeric:tabular-nums}
+.rekap .strong{font-weight:800;color:var(--green-800)}
+.rekap tfoot td{background:var(--paper-2);font-weight:800;border-bottom:none;font-variant-numeric:tabular-nums}
+.print-head,.ttd{display:none}
+
+.sync-form{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;background:var(--paper-2);
+  border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:10px}
+.sync-form .field.grow{flex:1;min-width:280px}
+.switch{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--green-800);cursor:pointer;padding-bottom:9px}
+.switch input{width:18px;height:18px;accent-color:var(--green-700)}
+.sync-status{font-size:13px;color:var(--muted);padding:2px 4px 16px}
+.panduan{border:1px solid var(--line);border-radius:12px;background:var(--paper-2);padding:14px 18px;margin-top:12px}
+.panduan summary{font-weight:800;cursor:pointer;color:var(--green-800);font-family:"Bricolage Grotesque";font-size:16px}
+.panduan ol{margin:12px 0 12px 20px;display:grid;gap:8px;font-size:13.5px;line-height:1.55}
+.panduan code{background:#efe7d0;padding:1px 6px;border-radius:5px;font-size:12px}
+.panduan .awas{font-size:12.5px;color:#8e3120;background:rgba(192,71,47,.08);border:1px dashed rgba(192,71,47,.4);
+  border-radius:8px;padding:8px 12px;margin:4px 0 12px}
+.codebox{position:relative}
+.codebox .mini{position:absolute;top:16px;right:14px;background:var(--paper);z-index:2}
+.codebox textarea{width:100%;margin-top:8px;border:1.5px solid #cabf9f;border-radius:9px;
+  background:#10241c;color:#cfe3d3;font-family:ui-monospace,Consolas,monospace;font-size:12px;
+  padding:14px;min-height:250px;resize:vertical;line-height:1.5}
+
+.foot{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  color:#8fb49d;font-size:12.5px;padding-top:6px;padding-bottom:40px}
+.foot-actions{display:flex;gap:8px;flex-wrap:wrap}
+.foot button,.btn-file{background:none;border:1.5px solid rgba(246,241,227,.3);color:#cfe3d3;
+  border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;transition:.15s;cursor:pointer}
+.foot button:hover,.btn-file:hover{border-color:var(--gold);color:var(--gold)}
+.foot .danger:hover{border-color:var(--red);color:#f0937f}
+
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);opacity:0;z-index:120;
+  background:var(--green-800);color:var(--paper);border-left:4px solid var(--gold);
+  padding:12px 20px;border-radius:10px;font-size:13.5px;font-weight:600;max-width:90vw;
+  box-shadow:0 16px 40px rgba(0,0,0,.5);transition:.3s;pointer-events:none}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#toast.err{border-left-color:var(--red)}
+
+.modal{position:fixed;inset:0;background:rgba(7,20,14,.7);display:grid;place-items:center;z-index:130;padding:20px}
+.modal[hidden]{display:none}
+.m-card{background:var(--paper);max-width:400px;width:100%;border-radius:14px;padding:24px;
+  box-shadow:0 30px 70px rgba(0,0,0,.55);animation:rise .25s}
+.m-card h3{font-family:"Bricolage Grotesque";font-size:20px;color:var(--green-900);margin-bottom:8px}
+.m-card p{font-size:14px;color:var(--muted);margin-bottom:18px}
+.m-actions{display:flex;gap:10px;justify-content:flex-end}
+.btn.red{background:var(--red);color:#fff;box-shadow:0 3px 0 #8e3120}
+
+@media (max-width:900px){
+  .stats{grid-template-columns:1fr 1fr}
+  .stat:nth-child(3){border-left:none;border-top:1.5px dashed var(--line)}
+  .stat:nth-child(4){border-top:1.5px dashed var(--line)}
+  .pages{grid-template-columns:1fr}
+  .inc-form,.kas-form{grid-template-columns:1fr}
+  .rutin-sum{grid-template-columns:1fr;gap:10px}
+  .rs-uang{text-align:left}
+  .top{align-items:flex-start}
+}
+@media print{
+  body{background:#fff}
+  .bg-art,.top,.stats,.tabs,.foot,#toast,.modal,.no-print{display:none!important}
+  main{padding:0}
+  .wrap{max-width:none;padding:0}
+  .panel{display:none!important;box-shadow:none;border:none;background:#fff;padding:0;margin:0;border-radius:0}
+  .panel.active{display:block!important}
+  .table-scroll{overflow:visible;border:none;border-radius:0}
+  .rekap th,.kas th,.lap th{background:#e8e2cf!important;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .rekap th,.rekap td,.kas th,.kas td,.lap th,.lap td{border:1px solid #777;padding:3.5px 7px;font-size:9.5pt}
+  .rekap tfoot td,.kas tfoot td,.lap tfoot td{background:#f3eeda!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .kas tr.auto td{background:#f7ecd2!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .lap tr.kini td{background:#eef5e9!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .print-head{display:block;text-align:center;margin-bottom:6mm}
+  .ph-org{font:800 13pt "Bricolage Grotesque";letter-spacing:.3em;color:#000;margin-bottom:1mm}
+  .ph-org::after{content:"";display:block;width:60mm;height:.7mm;background:#000;margin:1.5mm auto 0}
+  .print-head h3{font:800 13pt "Bricolage Grotesque";color:#000;letter-spacing:.04em;margin-top:2mm}
+  .print-head p{font-size:9pt;color:#555;margin-top:1.5mm}
+  .ttd{display:flex;justify-content:flex-end;gap:22mm;margin-top:12mm;font-size:10pt;color:#000}
+  .ttd-box{text-align:center;width:58mm}
+  .ttd-box b{font-weight:700}
+  .ttd-line{display:block;height:16mm}
+}
+</style>
+</head>
+<body>
+<div class="bg-art" aria-hidden="true"></div>
+
+<header class="top wrap">
+  <div class="brand">
+    <div class="coin" aria-hidden="true">Rp</div>
+    <div>
+      <p class="orgname">Paguyuban Tirto Wening</p>
+      <h1>Buku Kas <em>Warga</em></h1>
+      <p class="sub">Pencatatan keuangan 43 KK · iuran rutin, insidental, pemasukan, pengeluaran &amp; saldo otomatis</p>
+    </div>
+  </div>
+  <div class="top-right">
+    <div class="stamp">43 WARGA<br>TERCATAT</div>
+    <div class="top-col">
+      <button id="syncBadge" class="syncbadge" data-act="tab" data-tab="sync" title="Pengaturan sinkronisasi Google Sheet">
+        <span class="dot"></span><span id="syncBadgeTeks">Memuat…</span>
+      </button>
+      <div class="today" id="todayLabel"></div>
+    </div>
+  </div>
+</header>
+
+<section class="stats wrap" aria-label="Ringkasan kas">
+  <div class="stat"><div class="s-label">Warga Terdaftar</div><div class="s-val" id="stWarga"></div></div>
+  <div class="stat"><div class="s-label">Iuran Rutin Bulan Ini</div><div class="s-val" id="stRutin"></div></div>
+  <div class="stat"><div class="s-label">Arus Kas Bulan Ini</div><div class="s-val" id="stArus"></div></div>
+  <div class="stat emas"><div class="s-label">Saldo Kas Keseluruhan</div><div class="s-val" id="stSaldo"></div></div>
+</section>
+
+<nav class="tabs"><div class="tabs-in wrap">
+  <button class="active" data-act="tab" data-tab="warga"><i>01</i>Data Warga</button>
+  <button data-act="tab" data-tab="rutin"><i>02</i>Iuran Rutin</button>
+  <button data-act="tab" data-tab="insidental"><i>03</i>Iuran Insidental</button>
+  <button data-act="tab" data-tab="kas"><i>04</i>Buku Kas</button>
+  <button data-act="tab" data-tab="laporan"><i>05</i>Laporan Bulanan</button>
+  <button data-act="tab" data-tab="rekap"><i>06</i>Rekap Warga</button>
+  <button data-act="tab" data-tab="sync"><i>07</i>Sinkronisasi Sheet</button>
+</div></nav>
+
+<main class="wrap">
+
+  <section id="panel-warga" class="panel active">
+    <header class="panel-head">
+      <div><h2>Data Warga</h2>
+        <p class="muted">Kolom nomor urut &amp; nama — ketik langsung untuk mengubah nama, tersimpan otomatis.</p></div>
+      <input id="cariWarga" class="search" placeholder="🔍 Cari nama warga…" aria-label="Cari warga">
+    </header>
+    <div class="pages" id="wargaPages"></div>
+  </section>
+
+  <section id="panel-rutin" class="panel">
+    <header class="panel-head">
+      <div><h2>Iuran Rutin <small>— dibayarkan setiap bulan</small></h2></div>
+      <div class="ctrl">
+        <div class="ynav">
+          <button data-act="year-prev" aria-label="Tahun sebelumnya">‹</button>
+          <b data-tahun></b>
+          <button data-act="year-next" aria-label="Tahun berikutnya">›</button>
+        </div>
+        <label class="tarif">Tarif per bulan (Rp)
+          <input id="tarifInput" inputmode="numeric" min="0">
+        </label>
+      </div>
+    </header>
+    <div class="bulan-chips" id="bulanChips"></div>
+    <div class="rutin-sum" id="rutinSum"></div>
+    <div class="subtabs">
+      <button data-act="sub-rutin" data-sub="bulan">Daftar Bulanan</button>
+      <button data-act="sub-rutin" data-sub="matriks">Matriks Tahunan</button>
+      <span class="spacer"></span>
+      <button class="mini" data-act="all-paid">✓ Lunaskan semua bulan ini</button>
+      <button class="mini" data-act="all-unpaid">Kosongkan bulan ini</button>
+    </div>
+    <div id="rutinBody"></div>
+  </section>
+
+  <section id="panel-insidental" class="panel">
+    <header class="panel-head">
+      <div><h2>Iuran Insidental <small>— dibayarkan tidak tentu, sesuai keperluan</small></h2></div>
+      <div class="inc-total">Total terkumpul<b id="incTotal"></b></div>
+    </header>
+    <form id="formInc" class="inc-form">
+      <label>Kegiatan / keperluan
+        <input id="incNama" placeholder="mis. Perbaikan lampu jalan" maxlength="60" required>
+      </label>
+      <label>Nominal per warga (Rp)
+        <input id="incNominal" inputmode="numeric" value="50000" required>
+      </label>
+      <label>Tanggal
+        <input id="incTanggal" type="date" required>
+      </label>
+      <button class="btn" type="submit">+ Catat</button>
+    </form>
+    <div id="incList" class="inc-list"></div>
+  </section>
+
+  <section id="panel-kas" class="panel">
+    <header class="panel-head">
+      <div><h2>Buku Kas <small>— pemasukan &amp; pengeluaran</small></h2>
+        <p class="muted">Baris bertanda <span class="tag">otomatis</span> berasal dari iuran warga. Saldo tersambung ke Laporan Bulanan.</p></div>
+      <div class="ctrl">
+        <div class="ynav">
+          <button data-act="year-prev" aria-label="Tahun sebelumnya">‹</button>
+          <b data-tahun></b>
+          <button data-act="year-next" aria-label="Tahun berikutnya">›</button>
+        </div>
+        <select id="kasBulan" aria-label="Pilih bulan"></select>
+      </div>
+    </header>
+    <form id="kasForm" class="kas-form">
+      <label class="field">Tanggal<input id="kasTanggal" type="date" required></label>
+      <label class="field grow">Uraian / rincian transaksi
+        <input id="kasUraian" placeholder="mis. Pembelian alat kebersihan" maxlength="80" required>
+      </label>
+      <div class="jgroup">
+        <button type="button" class="jbtn masuk on" data-act="jenis" data-j="masuk">+ Masuk</button>
+        <button type="button" class="jbtn keluar" data-act="jenis" data-j="keluar">− Keluar</button>
+      </div>
+      <label class="field">Nominal (Rp)<input id="kasNominal" inputmode="numeric" required></label>
+      <button class="btn" type="submit">+ Catat</button>
+    </form>
+    <div class="table-scroll"><table class="kas" id="kasTable"></table></div>
+  </section>
+
+  <section id="panel-laporan" class="panel">
+    <header class="panel-head no-print">
+      <div><h2>Laporan Bulanan <small>— pemasukan, pengeluaran &amp; saldo otomatis</small></h2>
+        <p class="muted">Iuran rutin &amp; insidental dihitung otomatis dari catatan; transaksi lain diambil dari Buku Kas.</p></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <div class="ynav">
+          <button data-act="year-prev" aria-label="Tahun sebelumnya">‹</button>
+          <b data-tahun></b>
+          <button data-act="year-next" aria-label="Tahun berikutnya">›</button>
+        </div>
+        <button class="btn small" data-act="print">🖨 Cetak A4 Landscape</button>
+      </div>
+    </header>
+    <div class="print-head">
+      <p class="ph-org">PAGUYUBAN TIRTO WENING</p>
+      <h3>LAPORAN KAS BULANAN — TAHUN <span id="lapTahun"></span></h3>
+      <p>43 Kepala Keluarga · dicetak <span id="lapTgl"></span></p>
+    </div>
+    <label class="saldo-field no-print">Saldo awal sebelum pencatatan (Rp)
+      <input id="saldoAwalInput" inputmode="numeric" value="0">
+    </label>
+    <div class="table-scroll"><table class="lap" id="lapTable"></table></div>
+    <div class="ttd">
+      <div class="ttd-box">Mengetahui,<br><b>Ketua RT</b><span class="ttd-line"></span>( _________________________ )</div>
+      <div class="ttd-box"><br><b>Bendahara</b><span class="ttd-line"></span>( _________________________ )</div>
+    </div>
+  </section>
+
+  <section id="panel-rekap" class="panel">
+    <header class="panel-head no-print">
+      <div><h2>Rekap Tahun <span id="rekapTahun"></span></h2>
+        <p class="muted">Rangkuman setoran tiap warga: rutin (jumlah bulan × tarif) + insidental.</p></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn small" data-act="export-csv">⬇ Unduh CSV</button>
+        <button class="btn small ghost" data-act="print">🖨 Cetak A4 Landscape</button>
+      </div>
+    </header>
+    <div class="print-head">
+      <p class="ph-org">PAGUYUBAN TIRTO WENING</p>
+      <h3>REKAP IURAN WARGA — TAHUN <span id="printTahun"></span></h3>
+      <p>43 Kepala Keluarga · dicetak <span id="printTgl"></span></p>
+    </div>
+    <div class="table-scroll"><table class="rekap" id="rekapTable"></table></div>
+    <div class="ttd">
+      <div class="ttd-box">Mengetahui,<br><b>Ketua RT</b><span class="ttd-line"></span>( _________________________ )</div>
+      <div class="ttd-box"><br><b>Bendahara</b><span class="ttd-line"></span>( _________________________ )</div>
+    </div>
+  </section>
+
+  <section id="panel-sync" class="panel">
+    <header class="panel-head">
+      <div><h2>Sinkronisasi Google Sheet</h2>
+        <p class="muted">Seluruh rekap (termasuk Buku Kas &amp; Laporan Bulanan) dikirim otomatis — 6 tab siap cetak A4 landscape.</p></div>
+    </header>
+    <div class="sync-form">
+      <label class="field grow">URL Web App (akhiran /exec)
+        <input id="syncUrl" placeholder="https://script.google.com/macros/s/…/exec">
+      </label>
+      <button class="btn" data-act="sync-save">Simpan</button>
+      <button class="btn ghost" data-act="sync-kirim">⇪ Kirim Sekarang</button>
+      <button class="btn ghost" data-act="sync-tes">🔎 Tes Koneksi</button>
+      <button class="btn ghost" data-act="sync-ambil">⇩ Ambil dari Sheet</button>
+      <label class="switch"><input type="checkbox" id="syncAuto" checked> Otomatis</label>
+      <label class="switch"><input type="checkbox" id="syncMode"> Mode Kompatibel</label>
+    </div>
+    <div class="sync-status" id="syncStatus"></div>
+
+    <details class="panduan" open>
+      <summary>📋 Cara menghubungkan ke Google Sheet (sekali saja)</summary>
+      <ol>
+        <li>Buka <code>sheets.new</code> → buat spreadsheet baru, beri nama misal <b>“Buku Kas Paguyuban Tirto Wening”</b>.</li>
+        <li>Menu <code>Ekstensi → Apps Script</code> → hapus semua isi editor, tempel <b>Kode v4</b> di bawah, lalu simpan.</li>
+        <li>Pilih fungsi <code>ujiCoba</code> pada dropdown lalu klik <b>▶ Run</b>, izinkan akses. Pastikan 6 tab rekap terbentuk.</li>
+        <li><code>Deploy → New deployment</code> → tipe <b>Web app</b> → <b>Execute as: Me</b>, <b>Who has access: Anyone</b> → <b>Deploy</b>.</li>
+        <li>Salin <b>Web App URL</b> (berakhiran <code>/exec</code>) → tempel di kolom atas → <b>Simpan</b> → <b>🔎 Tes Koneksi</b> → <b>⇪ Kirim Sekarang</b>.</li>
+      </ol>
+      <p class="muted">Jika kode diedit: <code>Deploy → Manage deployments → ✏️ → Version: New version → Deploy</code>.</p>
+      <p class="awas">⚠ URL berfungsi seperti kata sandi — jangan dibagikan. Akses wajib “Anyone”.</p>
+      <div class="codebox">
+        <button class="mini" data-act="copy-script">⧉ Salin Kode v4</button>
+<textarea id="scriptCode" readonly spellcheck="false">
+/* =========================================================
+   BUKU KAS PAGUYUBAN TIRTO WENING — REKAP OTOMATIS SHEET (v4)
+   6 tab: Data Warga, Iuran Rutin, Iuran Insidental,
+   Buku Kas, Laporan Bulanan, Rekap Keseluruhan.
+   Semua tab diset cetak A4 landscape + pas lebar.
+   Uji dulu: pilih fungsi "ujiCoba" lalu klik Run.
+   ========================================================= */
+
+var ORG = "PAGUYUBAN TIRTO WENING";
+var SPREADSHEET_ID = "";
+
+var NS = {
+  warga: "Data Warga",
+  rutin: "Iuran Rutin",
+  insidental: "Iuran Insidental",
+  kas: "Buku Kas",
+  laporan: "Laporan Bulanan",
+  rekap: "Rekap Keseluruhan"
+};
+var BLN = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+var BLN_PANJANG = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+var W = { judul:"#0b241a", header:"#155238", putih:"#ffffff", total:"#e9a83a", garis:"#c9bd99", emas:"#b97e14" };
+
+function getSS(){
+  var ss = null;
+  try{ ss = SpreadsheetApp.getActiveSpreadsheet(); }catch(err){}
+  if(!ss && SPREADSHEET_ID){
+    try{ ss = SpreadsheetApp.openById(SPREADSHEET_ID); }catch(err){}
+  }
+  if(!ss) throw new Error("Spreadsheet tidak ditemukan. Buat script dari menu Ekstensi spreadsheet, atau isi SPREADSHEET_ID.");
+  return ss;
+}
+
+function doPost(e){
+  try{
+    if(!e || !e.postData || !e.postData.contents) throw new Error("Data tidak diterima (postData kosong).");
+    var data = JSON.parse(e.postData.contents);
+    if(!data || !Array.isArray(data.warga) || data.warga.length===0) throw new Error("Struktur data tidak dikenali.");
+    data.transaksi = data.transaksi || [];
+    data.saldoAwal = data.saldoAwal || 0;
+    PropertiesService.getScriptProperties().setProperty("SNAPSHOT", JSON.stringify(data));
+    var ss = getSS();
+    renderWarga(ss, data);
+    renderRutin(ss, data);
+    renderInsidental(ss, data);
+    renderBukuKas(ss, data);
+    renderLaporan(ss, data);
+    renderRekap(ss, data);
+    buangSheetKosong(ss);
+    return json({ ok:true, pesan:"Rekap berhasil diperbarui." });
+  }catch(err){
+    return json({ ok:false, pesan:String(err && err.message || err) });
+  }
+}
+
+function doGet(){
+  try{
+    var snap = PropertiesService.getScriptProperties().getProperty("SNAPSHOT");
+    return json({ ok:true, data: snap ? JSON.parse(snap) : null });
+  }catch(err){
+    return json({ ok:false, pesan:String(err && err.message || err) });
+  }
+}
+
+function json(o){
+  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
+}
+
+/* ---------- Uji dari editor ---------- */
+function ujiCoba(){
+  var tahun = new Date().getFullYear();
+  var data = {
+    tarifRutin: 20000, saldoAwal: 250000, warga: [], rutin: {},
+    insidental: [ { id:1, nama:"Contoh: Perbaikan Lampu Jalan", nominal:50000, tanggal:tahun+"-08-08", dibayar:[1,2,3,4,5] } ],
+    transaksi: [
+      { id:2, tanggal:tahun+"-08-02", uraian:"Donasi kotak amal", jenis:"masuk", nominal:150000 },
+      { id:3, tanggal:tahun+"-08-05", uraian:"Pembelian alat kebersihan", jenis:"keluar", nominal:85000 }
+    ]
+  };
+  for(var i=1;i<=43;i++) data.warga.push({no:i, nama:"Warga "+pad2(i)});
+  data.rutin[tahun] = { "0":[1,2,3], "1":[1,2,3,4,5] };
+  var ss = getSS();
+  renderWarga(ss, data);
+  renderRutin(ss, data);
+  renderInsidental(ss, data);
+  renderBukuKas(ss, data);
+  renderLaporan(ss, data);
+  renderRekap(ss, data);
+  Logger.log("Uji coba berhasil - periksa 6 tab rekap di spreadsheet.");
+  try{ SpreadsheetApp.getUi().alert("Uji coba berhasil! Periksa 6 tab rekap yang terbentuk."); }catch(err){}
+}
+
+/* ---------- Utilitas ---------- */
+function rupiah(n){ return Math.round(n||0).toLocaleString("id-ID"); }
+function pad2(n){ return String(n).padStart(2,"0"); }
+function tgl(iso){ return /^\d{4}-\d{2}-\d{2}$/.test(iso||"") ? iso.split("-").reverse().join("/") : (iso||""); }
+function kosong(n){ var a=[]; for(var i=0;i<n;i++) a.push(""); return a; }
+
+function sheetKosong(ss, nama, warnaTab){
+  var sh = ss.getSheetByName(nama) || ss.insertSheet(nama);
+  sh.clear();
+  try{ sh.setTabColor(warnaTab); }catch(err){}
+  try{
+    var ps = sh.getPrintSettings();
+    try{ if(typeof ps.setPaperSize === "function" && SpreadsheetApp.PaperSize) ps.setPaperSize(SpreadsheetApp.PaperSize.A4); }catch(e1){}
+    try{
+      var LAN = SpreadsheetApp.PageOrientation ? SpreadsheetApp.PageOrientation.LANDSCAPE : null;
+      if(LAN){
+        if(typeof ps.setOrientation === "function") ps.setOrientation(LAN);
+        if(typeof ps.setPageOrientation === "function") ps.setPageOrientation(LAN);
+      }
+    }catch(e2){}
+    try{ if(typeof ps.setFitToWidth === "function") ps.setFitToWidth(1); }catch(e3){}
+    try{ if(typeof ps.setCenter === "function") ps.setCenter(true,false); }catch(e4){}
+    try{ if(typeof ps.setMargins === "function") ps.setMargins(0.5,0.4,0.5,0.4,0.3,0.3); }catch(e5){}
+    sh.setPrintSettings(ps);
+  }catch(err){}
+  return sh;
+}
+
+function buangSheetKosong(ss){
+  try{
+    var sah = [NS.warga, NS.rutin, NS.insidental, NS.kas, NS.laporan, NS.rekap];
+    ss.getSheets().forEach(function(sh){
+      if(sah.indexOf(sh.getName())===-1 && sh.getLastRow()===0 && sh.getLastColumn()===0 && ss.getSheets().length>1){
+        ss.deleteSheet(sh);
+      }
+    });
+  }catch(err){}
+}
+
+/* ---------- Hitungan bulanan ---------- */
+function hitungBulan(data, t, b){
+  var tarif = data.tarifRutin||0;
+  var key = t+"-"+pad2(b+1);
+  var rutin = (((((data.rutin||{})[t])||{})[b])||[]).length * tarif;
+  var inc=0, lain=0, keluar=0;
+  (data.insidental||[]).forEach(function(e){
+    if(String(e.tanggal||"").slice(0,7)===key) inc += (e.dibayar||[]).length*(e.nominal||0);
+  });
+  (data.transaksi||[]).forEach(function(x){
+    if(String(x.tanggal||"").slice(0,7)===key){
+      if(x.jenis==="masuk") lain += x.nominal||0; else keluar += x.nominal||0;
+    }
+  });
+  return { rutin:rutin, inc:inc, lain:lain, masuk:rutin+inc+lain, keluar:keluar };
+}
+
+function kumpulTahun(data){
+  var set = {};
+  for(var t in (data.rutin||{})) set[t]=1;
+  (data.insidental||[]).forEach(function(e){ var y=parseInt(String(e.tanggal||"").slice(0,4),10); if(y>1900) set[y]=1; });
+  (data.transaksi||[]).forEach(function(x){ var y=parseInt(String(x.tanggal||"").slice(0,4),10); if(y>1900) set[y]=1; });
+  set[new Date().getFullYear()]=1;
+  return Object.keys(set).map(Number).sort(function(a,b){return a-b;});
+}
+
+function saldoSebelumScript(data, t, b){
+  var s = data.saldoAwal||0;
+  var ys = kumpulTahun(data);
+  for(var i=0;i<ys.length;i++){
+    var y = ys[i];
+    if(y>t) break;
+    var mMax = (y===t)?b:12;
+    for(var m=0;m<mMax;m++){
+      var h = hitungBulan(data,y,m);
+      s += h.masuk-h.keluar;
+    }
+  }
+  return s;
+}
+
+/* ---------- Tab Data Warga ---------- */
+function renderWarga(ss, data){
+  var sh = sheetKosong(ss, NS.warga, "#1f7a4d");
+  var rows = [["No","Nama Warga"]];
+  data.warga.forEach(function(w){ rows.push([w.no, w.nama]); });
+  sh.getRange(1,1,rows.length,2).setValues(rows);
+  sh.getRange(1,1,1,2).setBackground(W.header).setFontColor(W.putih).setFontWeight("bold").setHorizontalAlignment("center");
+  sh.getRange(2,1,rows.length-1,2).setBorder(true,true,true,true,true,true,W.garis);
+  sh.getRange(2,1,rows.length-1,1).setHorizontalAlignment("center");
+  sh.setFrozenRows(1);
+  sh.setColumnWidths(1,2,[70,320]);
+}
+
+/* ---------- Tab Iuran Rutin ---------- */
+function renderRutin(ss, data){
+  var sh = sheetKosong(ss, NS.rutin, "#e9a83a");
+  var tarif = data.tarifRutin||0;
+  var n = data.warga.length;
+  var tahunList = Object.keys(data.rutin||{}).map(Number).filter(function(t){return t>1900;}).sort(function(a,b){return b-a;});
+  if(!tahunList.length) tahunList = [new Date().getFullYear()];
+
+  var rows = [], judul = [], header = [];
+  tahunList.forEach(function(t){
+    judul.push(rows.length);
+    rows.push([ORG+" - IURAN RUTIN TAHUN " + t + "  -  Tarif Rp" + rupiah(tarif) + "/bulan"].concat(kosong(15)));
+    header.push(rows.length);
+    rows.push(["No","Nama Warga"].concat(BLN,["Σ Bulan","Nominal"]));
+    var tot = [0,0,0,0,0,0,0,0,0,0,0,0], totBulan = 0;
+    data.warga.forEach(function(w){
+      var sel = [w.no, w.nama], c = 0;
+      for(var b=0;b<12;b++){
+        var ada = (((data.rutin[t]||{})[b])||[]).indexOf(w.no) > -1;
+        sel.push(ada ? "✓" : "");
+        if(ada){ c++; tot[b]++; }
+      }
+      totBulan += c;
+      sel.push(c, c*tarif);
+      rows.push(sel);
+    });
+    rows.push(["","TOTAL"].concat(tot,[totBulan, totBulan*tarif]));
+    rows.push(kosong(16));
+  });
+
+  sh.getRange(1,1,rows.length,16).setValues(rows);
+  judul.forEach(function(i){
+    sh.getRange(i+1,1).setFontSize(12).setFontWeight("bold").setFontColor(W.judul);
+  });
+  header.forEach(function(h){
+    sh.getRange(h+1,1,1,16).setBackground(W.header).setFontColor(W.putih).setFontWeight("bold").setHorizontalAlignment("center");
+    sh.getRange(h+1,1,n+2,16).setBorder(true,true,true,true,true,true,W.garis);
+    sh.getRange(h+2,3,n,13).setHorizontalAlignment("center");
+    sh.getRange(h+1,16,n+2,1).setNumberFormat('"Rp"#,##0').setHorizontalAlignment("right");
+    sh.getRange(h+n+2,1,1,16).setBackground(W.total).setFontWeight("bold");
+  });
+  sh.setColumnWidth(1,46); sh.setColumnWidth(2,190);
+  for(var c=3;c<=14;c++) sh.setColumnWidth(c,34);
+  sh.setColumnWidth(15,62); sh.setColumnWidth(16,120);
+}
+
+/* ---------- Tab Iuran Insidental ---------- */
+function renderInsidental(ss, data){
+  var sh = sheetKosong(ss, NS.insidental, "#c0472f");
+  var ev = data.insidental || [];
+  var rows = [["Tanggal","Kegiatan","Nominal per Warga","Jumlah Pembayar","Terkumpul","Warga yang Membayar"]];
+  if(ev.length===0){
+    rows.push(["-","Belum ada iuran insidental yang tercatat.",0,0,0,""]);
+  }else{
+    ev.forEach(function(x){
+      var dibayar = x.dibayar || [];
+      var daftar = dibayar.map(function(no){
+        var w = null;
+        data.warga.forEach(function(p){ if(p.no===no) w = p; });
+        return w ? pad2(no)+". "+w.nama : String(no);
+      }).join(", ");
+      rows.push([tgl(x.tanggal), x.nama, x.nominal, dibayar.length, dibayar.length*(x.nominal||0), daftar]);
+    });
+    var totOrang = ev.reduce(function(s,x){ return s+(x.dibayar||[]).length; },0);
+    var totDana  = ev.reduce(function(s,x){ return s+(x.dibayar||[]).length*(x.nominal||0); },0);
+    rows.push(["","TOTAL","",totOrang,totDana,""]);
+  }
+  sh.getRange(1,1,rows.length,6).setValues(rows);
+  sh.getRange(1,1,1,6).setBackground(W.header).setFontColor(W.putih).setFontWeight("bold").setHorizontalAlignment("center");
+  sh.getRange(2,1,rows.length-1,6).setBorder(true,true,true,true,true,true,W.garis);
+  sh.getRange(2,6,rows.length-1,1).setWrap(true).setVerticalAlignment("top");
+  sh.getRange(2,3,rows.length-1,1).setNumberFormat('"Rp"#,##0');
+  sh.getRange(2,5,rows.length-1,1).setNumberFormat('"Rp"#,##0');
+  sh.getRange(2,4,rows.length-1,1).setHorizontalAlignment("center");
+  if(ev.length) sh.getRange(rows.length,1,1,6).setBackground(W.total).setFontWeight("bold");
+  sh.setFrozenRows(1);
+  sh.setColumnWidths(1,6,[95,300,150,120,140,520]);
+}
+
+/* ---------- Tab Buku Kas ---------- */
+function renderBukuKas(ss, data){
+  var sh = sheetKosong(ss, NS.kas, "#155238");
+  var rows = [["Tanggal","Uraian / Rincian","Pemasukan","Pengeluaran","Saldo"]];
+  var saldo = data.saldoAwal||0;
+  rows.push(["","Saldo awal pencatatan","","",saldo]);
+  var totalIdx = [];
+  var now = new Date();
+  var ys = kumpulTahun(data);
+  ys.forEach(function(y){
+    var mEnd = (y<now.getFullYear()) ? 12 : ((y===now.getFullYear()) ? now.getMonth()+1 : 0);
+    for(var b=0;b<mEnd;b++){
+      var items = [];
+      (data.transaksi||[]).forEach(function(x){
+        if(String(x.tanggal||"").slice(0,7)===y+"-"+pad2(b+1)){
+          items.push({ iso:x.tanggal, r:[tgl(x.tanggal), x.uraian, x.jenis==="masuk"?(x.nominal||0):"", x.jenis==="keluar"?(x.nominal||0):""] });
+        }
+      });
+      (data.insidental||[]).forEach(function(e){
+        if(String(e.tanggal||"").slice(0,7)===y+"-"+pad2(b+1) && (e.dibayar||[]).length>0){
+          items.push({ iso:e.tanggal, r:[tgl(e.tanggal), "Iuran insidental: "+e.nama+" ("+(e.dibayar||[]).length+" warga)", (e.dibayar||[]).length*(e.nominal||0), ""] });
+        }
+      });
+      var rCount = ((((data.rutin||{})[y])||{})[b]||[]).length;
+      if(rCount>0){
+        var isoAkhir = y+"-"+pad2(b+1)+"-"+pad2(new Date(y,b+1,0).getDate());
+        items.push({ iso:isoAkhir, r:[tgl(isoAkhir), "Iuran rutin "+BLN_PANJANG[b]+" "+y+" ("+rCount+" warga)", rCount*(data.tarifRutin||0), ""] });
+      }
+      if(!items.length) return;
+      items.sort(function(a,c){ return a.iso<c.iso?-1:(a.iso>c.iso?1:0); });
+      var mIn=0, mOut=0;
+      items.forEach(function(it){
+        var masuk = it.r[2]===""?0:it.r[2];
+        var keluar = it.r[3]===""?0:it.r[3];
+        saldo += masuk-keluar; mIn+=masuk; mOut+=keluar;
+        rows.push([it.r[0], it.r[1], it.r[2], it.r[3], saldo]);
+      });
+      totalIdx.push(rows.length);
+      rows.push(["","TOTAL "+BLN_PANJANG[b].toUpperCase()+" "+y, mIn, mOut, saldo]);
+    }
+  });
+  sh.getRange(1,1,rows.length,5).setValues(rows);
+  sh.getRange(1,1,1,5).setBackground(W.header).setFontColor(W.putih).setFontWeight("bold").setHorizontalAlignment("center");
+  sh.getRange(2,1,rows.length-1,5).setBorder(true,true,true,true,true,true,W.garis);
+  sh.getRange(2,3,rows.length-1,3).setNumberFormat('"Rp"#,##0').setHorizontalAlignment("right");
+  sh.getRange(2,2,rows.length-1,1).setWrap(true);
+  totalIdx.forEach(function(i){ sh.getRange(i,1,1,5).setBackground(W.total).setFontWeight("bold"); });
+  sh.setFrozenRows(1);
+  sh.setColumnWidths(1,5,[95,470,140,140,150]);
+}
+
+/* ---------- Tab Laporan Bulanan ---------- */
+function renderLaporan(ss, data){
+  var sh = sheetKosong(ss, NS.laporan, "#0f3225");
+  var tahun = Number(data._tahunLaporan) || new Date().getFullYear();
+  var rows = [
+    [ORG].concat(kosong(7)),
+    ["LAPORAN KAS BULANAN TAHUN "+tahun].concat(kosong(7)),
+    ["43 KK - Saldo awal sebelum pencatatan: Rp"+rupiah(data.saldoAwal||0)].concat(kosong(7)),
+    kosong(8),
+    ["Bulan","Saldo Awal","Iuran Rutin","Iuran Insidental","Masuk Lainnya","Total Masuk","Pengeluaran","Saldo Akhir"]
+  ];
+  var saldo = saldoSebelumScript(data, tahun, 0);
+  var awalTahun = saldo;
+  var tR=0,tI=0,tL=0,tM=0,tK=0;
+  for(var b=0;b<12;b++){
+    var h = hitungBulan(data, tahun, b);
+    rows.push([BLN_PANJANG[b], saldo, h.rutin, h.inc, h.lain, h.masuk, h.keluar, saldo+h.masuk-h.keluar]);
+    tR+=h.rutin; tI+=h.inc; tL+=h.lain; tM+=h.masuk; tK+=h.keluar;
+    saldo += h.masuk-h.keluar;
+  }
+  rows.push(["JUMLAH "+tahun, awalTahun, tR, tI, tL, tM, tK, saldo]);
+  sh.getRange(1,1,rows.length,8).setValues(rows);
+  sh.getRange(1,1).setFontSize(13).setFontWeight("bold").setFontColor(W.judul);
+  sh.getRange(2,1).setFontSize(12).setFontWeight("bold").setFontColor(W.emas);
+  sh.getRange(3,1).setFontColor(W.emas).setFontStyle("italic").setFontSize(9);
+  sh.getRange(5,1,1,8).setBackground(W.header).setFontColor(W.putih).setFontWeight("bold").setHorizontalAlignment("center");
+  sh.getRange(6,1,12,8).setBorder(true,true,true,true,true,true,W.garis);
+  sh.getRange(6,2,13,7).setNumberFormat('"Rp"#,##0').setHorizontalAlignment("right");
+  sh.getRange(rows.length,1,1,8).setBackground(W.total).setFontWeight("bold");
+  sh.setFrozenRows(5);
+  sh.setColumnWidths(1,8,[120,130,120,130,120,130,130,140]);
+}
+
+/* ---------- Tab Rekap Keseluruhan ---------- */
+function renderRekap(ss, data){
+  var sh = sheetKosong(ss, NS.rekap, "#0f3225");
+  var tarif = data.tarifRutin || 0;
+  var ev = data.insidental || [];
+  var rows = [
+    [ORG].concat(kosong(5)),
+    ["REKAP KESELURUHAN IURAN WARGA - "+data.warga.length+" KK"].concat(kosong(5)),
+    ["Diperbarui otomatis: "+Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd MMMM yyyy HH:mm")].concat(kosong(5)),
+    kosong(6),
+    ["No","Nama Warga","Rutin (bulan)","Nominal Rutin","Insidental","TOTAL"]
+  ];
+  var tB=0, tR=0, tI=0;
+  data.warga.forEach(function(w){
+    var bln=0;
+    for(var t in (data.rutin||{})){
+      for(var b in data.rutin[t]){
+        if(((data.rutin[t][b])||[]).indexOf(w.no)>-1) bln++;
+      }
+    }
+    var inc = ev.reduce(function(s,x){ return s + (((x.dibayar||[]).indexOf(w.no)>-1) ? (x.nominal||0) : 0); },0);
+    tB+=bln; tR+=bln*tarif; tI+=inc;
+    rows.push([w.no, w.nama, bln, bln*tarif, inc, bln*tarif+inc]);
+  });
+  rows.push(["","JUMLAH",tB,tR,tI,tR+tI]);
+  sh.getRange(1,1,rows.length,6).setValues(rows);
+  sh.getRange(1,1).setFontSize(13).setFontWeight("bold").setFontColor(W.judul);
+  sh.getRange(2,1).setFontSize(12).setFontWeight("bold").setFontColor(W.emas);
+  sh.getRange(3,1).setFontColor(W.emas).setFontStyle("italic").setFontSize(9);
+  sh.getRange(5,1,1,6).setBackground(W.header).setFontColor(W.putih).setFontWeight("bold").setHorizontalAlignment("center");
+  sh.getRange(6,1,data.warga.length,6).setBorder(true,true,true,true,true,true,W.garis);
+  sh.getRange(6,3,data.warga.length,1).setHorizontalAlignment("center");
+  sh.getRange(5,4,data.warga.length+2,3).setNumberFormat('"Rp"#,##0').setHorizontalAlignment("right");
+  sh.getRange(rows.length,1,1,6).setBackground(W.total).setFontWeight("bold");
+  sh.setFrozenRows(5);
+  sh.setColumnWidths(1,6,[48,230,110,150,150,160]);
+}
+</textarea>
+      </div>
+    </details>
+
+    <details class="panduan">
+      <summary>❓ Masih gagal sinkron? Periksa satu per satu</summary>
+      <ol>
+        <li>URL wajib berakhiran <code>/exec</code> (bukan <code>/dev</code>).</li>
+        <li>Deployment: <b>Execute as = Me</b>, <b>Who has access = Anyone</b>.</li>
+        <li>Setiap edit kode wajib deploy ulang versi baru.</li>
+        <li>Jalankan <code>ujiCoba</code> dari editor — error merah di log menunjukkan sumber masalah.</li>
+        <li>Jika muncul <i>Failed to fetch / CORS</i>, centang <b>Mode Kompatibel</b>.</li>
+      </ol>
+    </details>
+  </section>
+
+</main>
+
+<footer class="foot wrap">
+  <span>💾 Paguyuban Tirto Wening · data tersimpan otomatis di peramban &amp; tersinkron ke Google Sheet (6 tab rekap).</span>
+  <div class="foot-actions">
+    <button data-act="export-json">Cadangkan (JSON)</button>
+    <label class="btn-file">Muat Cadangan<input type="file" id="importFile" accept=".json" hidden></label>
+    <button data-act="reset" class="danger">Reset Data</button>
+  </div>
+</footer>
+
+<div id="toast" role="status"></div>
+
+<div id="modal" class="modal" hidden>
+  <div class="m-card">
+    <h3 id="mJudul"></h3>
+    <p id="mPesan"></p>
+    <div class="m-actions">
+      <button class="btn ghost" id="mNo">Batal</button>
+      <button class="btn red" id="mYes">Ya, lanjutkan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const TOTAL_WARGA = 43;
+const BULAN = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+const BULAN_PDK = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+const KEY = "buku-kas-warga-43";
+
+const rupiah = n => new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(n||0);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const pad = n => String(n).padStart(2,"0");
+const angka = v => parseInt(String(v).replace(/[^0-9]/g,""),10) || 0;
+const isoLocal = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const tglIndo = iso => { const d = new Date(iso+"T00:00:00"); return isNaN(d) ? iso : d.toLocaleDateString("id-ID",{day:"numeric",month:"short",year:"numeric"}); };
+const ym = (t,b) => t+"-"+pad(b+1);
+const akhirBulan = (t,b) => pad(new Date(t,b+1,0).getDate());
+const el = id => document.getElementById(id);
+
+function stateBaru(){
+  return {
+    warga: Array.from({length:TOTAL_WARGA},(_,i)=>({no:i+1, nama:"Warga "+pad(i+1)})),
+    tarifRutin: 20000, rutin: {}, insidental: [],
+    transaksi: [], saldoAwal: 0
+  };
+}
+function muat(){
+  try{
+    const s = JSON.parse(localStorage.getItem(KEY) || localStorage.getItem("buku-iuran-warga-43"));
+    if(!s || !Array.isArray(s.warga) || s.warga.length !== TOTAL_WARGA) return null;
+    s.rutin = s.rutin || {}; s.insidental = s.insidental || [];
+    s.transaksi = s.transaksi || []; s.saldoAwal = s.saldoAwal ?? 0;
+    s.tarifRutin = s.tarifRutin ?? 20000;
+    return s;
+  }catch(e){ return null; }
+}
+let state = muat() || stateBaru();
+function simpan(){
+  localStorage.setItem(KEY, JSON.stringify(state));
+  jadwalkanSync();
+}
+
+const kini = new Date();
+const ui = { tahun: kini.getFullYear(), bulan: kini.getMonth(), sub:"bulan", buka: new Set() };
+let kasJenis = "masuk";
+
+/* ================= KEUANGAN (otomatis) ================= */
+function penghasilanBulan(t,b){
+  const rutin = (state.rutin[t]?.[b]||[]).length * state.tarifRutin;
+  let inc=0, lain=0;
+  state.insidental.forEach(e=>{ if((e.tanggal||"").slice(0,7)===ym(t,b)) inc += e.dibayar.length*e.nominal; });
+  state.transaksi.forEach(x=>{ if((x.tanggal||"").slice(0,7)===ym(t,b) && x.jenis==="masuk") lain += x.nominal||0; });
+  return { rutin, inc, lain, total: rutin+inc+lain };
+}
+function pengeluaranBulan(t,b){
+  let k=0;
+  state.transaksi.forEach(x=>{ if((x.tanggal||"").slice(0,7)===ym(t,b) && x.jenis==="keluar") k += x.nominal||0; });
+  return k;
+}
+function tahunAktif(){
+  const s = new Set([kini.getFullYear(), ui.tahun]);
+  Object.keys(state.rutin).forEach(t=>s.add(+t));
+  state.insidental.forEach(e=>{ const y=+String(e.tanggal||"").slice(0,4); if(y>1900) s.add(y); });
+  state.transaksi.forEach(x=>{ const y=+String(x.tanggal||"").slice(0,4); if(y>1900) s.add(y); });
+  return [...s].sort((a,b)=>a-b);
+}
+function saldoSebelum(t,b){
+  let s = state.saldoAwal||0;
+  for(const y of tahunAktif()){
+    if(y>t) break;
+    const mMax = (y===t)?b:12;
+    for(let m=0;m<mMax;m++) s += penghasilanBulan(y,m).total - pengeluaranBulan(y,m);
+  }
+  return s;
+}
+function saldoKasKini(){
+  let s = state.saldoAwal||0;
+  for(const y of tahunAktif()) for(let m=0;m<12;m++) s += penghasilanBulan(y,m).total - pengeluaranBulan(y,m);
+  return s;
+}
+
+/* ================= SINKRONISASI ================= */
+const SKEY = "buku-kas-sync";
+let syncCfg = (()=>{
+  try{ return Object.assign({url:"", auto:true, terakhir:null, mode:"normal"}, JSON.parse(localStorage.getItem(SKEY))||{}); }
+  catch(e){ return {url:"", auto:true, terakhir:null, mode:"normal"}; }
+})();
+const saveSyncCfg = ()=> localStorage.setItem(SKEY, JSON.stringify(syncCfg));
+let syncState="idle", syncErr="", syncNote="", syncTimer=null, syncSibuk=false;
+
+function perbaruiStatusSync(){
+  const b=el("syncBadge"), t=el("syncBadgeTeks"), s=el("syncStatus");
+  if(!b) return;
+  let cls="off", teks="Belum terhubung", info="Belum terhubung ke Google Sheet. Atur URL Web App (berakhiran /exec) lalu Simpan.";
+  if(syncCfg.url){
+    if(syncState==="busy"){ cls="busy"; teks="Mengirim ke Sheet…"; info="Sedang mengirim rekap ke Google Sheet…"; }
+    else if(syncState==="err"){ cls="err"; teks="Gagal sinkron"; info="Gagal: "+syncErr+" — lihat daftar “Masih gagal?”."; }
+    else{
+      cls="on";
+      teks = syncCfg.auto ? "Sinkron otomatis aktif" : "Terhubung (manual)";
+      info = (syncCfg.terakhir ? "Terakhir terkirim: "+new Date(syncCfg.terakhir).toLocaleString("id-ID") : "Terhubung, belum ada pengiriman.");
+      if(syncNote) info += " · "+syncNote;
+      if(syncCfg.auto) info += " · Setiap perubahan dikirim otomatis.";
+    }
+  }
+  b.className="syncbadge "+cls; t.textContent=teks;
+  if(s) s.textContent=info;
+}
+function jadwalkanSync(){
+  if(!syncCfg.url || !syncCfg.auto) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(()=>kirimKeSheet(false), 1500);
+}
+async function kirimKeSheet(manual){
+  if(!syncCfg.url){
+    if(manual){ toast("Isi dulu URL Web App lalu Simpan","err"); pindahTab("sync"); }
+    return;
+  }
+  if(syncSibuk) return;
+  syncSibuk=true; syncState="busy"; syncErr=""; syncNote=""; perbaruiStatusSync();
+  const payload = JSON.stringify(Object.assign({}, state, {_ts:Date.now(), _tahunLaporan:ui.tahun}));
+  try{
+    let konfirmasi=false;
+    if(syncCfg.mode==="kompatibel"){
+      await fetch(syncCfg.url, {method:"POST", mode:"no-cors", body:payload});
+      syncNote="Mode kompatibel: terkirim tanpa konfirmasi balasan.";
+    }else{
+      try{
+        const res = await fetch(syncCfg.url, {method:"POST", body:payload});
+        const teks = await res.text();
+        let j;
+        try{ j=JSON.parse(teks); }catch(e){ throw new Error("Respons bukan JSON (akses deployment harus “Anyone”)."); }
+        if(!j.ok) throw new Error(j.pesan || "Sheet menolak data.");
+        konfirmasi=true;
+      }catch(err){
+        await fetch(syncCfg.url, {method:"POST", mode:"no-cors", body:payload});
+        syncNote="Terkirim via mode kompatibel (konfirmasi tak terbaca).";
+      }
+    }
+    syncState="idle";
+    syncCfg.terakhir=new Date().toISOString(); saveSyncCfg();
+    if(manual) toast(konfirmasi ? "☁ Rekap terkirim & dikonfirmasi Google Sheet" : "☁ Rekap terkirim ke Google Sheet");
+  }catch(err){
+    syncState="err"; syncErr=err.message||String(err);
+    if(manual) toast("✕ Gagal mengirim: "+syncErr,"err");
+  }
+  syncSibuk=false; perbaruiStatusSync();
+}
+async function tesKoneksi(){
+  if(!syncCfg.url){ toast("Isi dulu URL Web App","err"); return; }
+  syncState="busy"; perbaruiStatusSync();
+  try{
+    const res = await fetch(syncCfg.url);
+    const teks = await res.text();
+    let j;
+    try{ j=JSON.parse(teks); }catch(e){ throw new Error("Respons bukan JSON — biasanya akses deployment bukan “Anyone”."); }
+    if(!j.ok) throw new Error(j.pesan||"");
+    toast("✓ Koneksi berhasil! "+(j.data?"Sudah ada data tersimpan di Sheet.":"Sheet siap — silakan Kirim Sekarang."));
+    syncState="idle";
+  }catch(err){
+    syncState="err"; syncErr=err.message||String(err);
+    toast("✕ Tes gagal: "+syncErr,"err");
+  }
+  perbaruiStatusSync();
+}
+async function ambilDariSheet(){
+  if(!syncCfg.url){ toast("Isi dulu URL Web App","err"); return; }
+  syncState="busy"; perbaruiStatusSync();
+  try{
+    const res = await fetch(syncCfg.url);
+    const j = JSON.parse(await res.text());
+    if(j.ok && j.data && Array.isArray(j.data.warga)){
+      confirmModal("Ambil data dari Sheet?",
+        "Data di aplikasi ini akan diganti dengan data terakhir yang tersimpan di Google Sheet.",
+        "Ya, ambil", ()=>{ state=j.data; state.transaksi=state.transaksi||[]; state.saldoAwal=state.saldoAwal||0; simpan(); renderAll(); toast("✓ Data dimuat dari Google Sheet"); });
+    } else toast("Belum ada data tersimpan di Sheet","err");
+  }catch(err){ toast("✕ Gagal mengambil data: "+err.message,"err"); }
+  syncState="idle"; perbaruiStatusSync();
+}
+
+/* ================= HELPER IURAN ================= */
+const arrRutin = (t,b) => ((state.rutin[t] ||= {})[b] ||= []);
+const lunas = (t,b,no) => (state.rutin[t]?.[b] || []).includes(no);
+function setLunas(t,b,no,val){
+  const a = arrRutin(t,b), i = a.indexOf(no);
+  if(val && i===-1) a.push(no);
+  if(!val && i>-1) a.splice(i,1);
+}
+const totalIncidental = () => state.insidental.reduce((s,e)=> s + e.dibayar.length*e.nominal, 0);
+function rekapWarga(no){
+  let bln=0; const th = state.rutin[ui.tahun] || {};
+  for(const b in th) if(th[b].includes(no)) bln++;
+  const inc = state.insidental.reduce((s,e)=> s + (e.dibayar.includes(no) ? e.nominal : 0), 0);
+  return { bln, rutin: bln*state.tarifRutin, inc, total: bln*state.tarifRutin + inc };
+}
+
+/* ================= RENDER ================= */
+let statPrev = {};
+function setStat(id, html){
+  const n = el(id);
+  if(statPrev[id] !== html){ n.innerHTML = html; n.classList.remove("bump"); void n.offsetWidth; n.classList.add("bump"); statPrev[id]=html; }
+}
+function renderStats(){
+  const b=kini.getMonth(), t=kini.getFullYear();
+  const byr=(state.rutin[t]?.[b]||[]).length;
+  const h=penghasilanBulan(t,b), k=pengeluaranBulan(t,b);
+  setStat("stWarga", `<b>${TOTAL_WARGA}</b><span>kepala keluarga</span>`);
+  setStat("stRutin", `<b>${byr}/${TOTAL_WARGA}</b><span>lunas · ${BULAN[b]} ${t}</span>`);
+  setStat("stArus", `<b>${rupiah(h.total-k)}</b><span>masuk ${rupiah(h.total)} · keluar ${rupiah(k)}</span>`);
+  setStat("stSaldo", `<b>${rupiah(saldoKasKini())}</b><span>saldo kas keseluruhan</span>`);
+}
+function renderWarga(){
+  const half = Math.ceil(TOTAL_WARGA/2);
+  const halaman = (list, judul) => `
+    <div class="page"><div class="page-cap">${judul}</div>
+      ${list.map(w=>`
+        <div class="wrow">
+          <span class="wno">${pad(w.no)}</span>
+          <input class="wnama" data-no="${w.no}" value="${esc(w.nama)}" placeholder="tuliskan nama…" maxlength="40" aria-label="Nama warga nomor ${w.no}">
+        </div>`).join("")}
+    </div>`;
+  el("wargaPages").innerHTML =
+    halaman(state.warga.slice(0,half), `Halaman 1 · No. 1–${half}`) +
+    halaman(state.warga.slice(half), `Halaman 2 · No. ${half+1}–${TOTAL_WARGA}`);
+}
+function setTahunAll(){ document.querySelectorAll("[data-tahun]").forEach(n=>n.textContent=ui.tahun); }
+function renderRutin(){
+  setTahunAll();
+  if(document.activeElement !== el("tarifInput")) el("tarifInput").value = state.tarifRutin;
+  el("bulanChips").innerHTML = BULAN_PDK.map((n,i)=>{
+    const c = (state.rutin[ui.tahun]?.[i] || []).length;
+    return `<button class="bchip ${i===ui.bulan?"on":""} ${c===TOTAL_WARGA?"full":""}" data-act="pilih-bulan" data-b="${i}">
+      <span>${n}</span><b>${c}</b></button>`;
+  }).join("");
+  const bayar = (state.rutin[ui.tahun]?.[ui.bulan] || []).length;
+  el("rutinSum").innerHTML = `
+    <div><div class="rs-bulan">${BULAN[ui.bulan]} ${ui.tahun}</div>
+      <div class="rs-angka"><b>${bayar}</b>/${TOTAL_WARGA} warga lunas</div></div>
+    <div class="bar"><div class="fill" style="width:${bayar/TOTAL_WARGA*100}%"></div></div>
+    <div class="rs-uang">Terkumpul <b>${rupiah(bayar*state.tarifRutin)}</b>
+      <small>dari target ${rupiah(TOTAL_WARGA*state.tarifRutin)}</small></div>`;
+  document.querySelectorAll(".subtabs [data-sub]").forEach(b=>b.classList.toggle("on", b.dataset.sub===ui.sub));
+  el("rutinBody").innerHTML = ui.sub==="bulan" ? htmlBulanan() : htmlMatriks();
+}
+function htmlBulanan(){
+  return state.warga.map(w=>{
+    const p = lunas(ui.tahun, ui.bulan, w.no);
+    return `<div class="payrow ${p?"paid":""}">
+      <span class="wno">${pad(w.no)}</span>
+      <span class="paynama">${esc(w.nama)}</span>
+      <button class="chip ${p?"on":""}" data-act="toggle-rutin" data-no="${w.no}" aria-pressed="${p}">${p?"✓ LUNAS":"BELUM DIBAYAR"}</button>
+    </div>`;
+  }).join("");
+}
+function htmlMatriks(){
+  const head = `<tr><th class="m-warga">Warga</th>${BULAN_PDK.map((n,i)=>`<th class="${i===ui.bulan?"hl":""}">${n}</th>`).join("")}<th>Σ</th></tr>`;
+  const rows = state.warga.map(w=>{
+    let sel=0;
+    const cells = BULAN_PDK.map((_,i)=>{
+      const p = lunas(ui.tahun,i,w.no); if(p) sel++;
+      return `<td class="${i===ui.bulan?"hl":""}"><button class="cell ${p?"on":""}" data-act="toggle-rutin" data-no="${w.no}" data-b="${i}" aria-label="${esc(w.nama)} — ${BULAN[i]}"></button></td>`;
+    }).join("");
+    return `<tr><td class="m-warga"><b>${pad(w.no)}</b>&nbsp; ${esc(w.nama)}</td>${cells}<td class="m-sum">${sel}</td></tr>`;
+  }).join("");
+  let grand=0;
+  const tots = BULAN_PDK.map((_,i)=>{ const c=(state.rutin[ui.tahun]?.[i]||[]).length; grand+=c; return `<td class="${i===ui.bulan?"hl":""}">${c}</td>`; }).join("");
+  return `<div class="table-scroll"><table class="matrix">
+    <thead>${head}</thead><tbody>${rows}</tbody>
+    <tfoot class="m-foot"><tr><td class="m-warga">Total lunas per bulan</td>${tots}<td class="m-sum">${grand}</td></tr></tfoot>
+  </table></div>`;
+}
+function renderIncidental(){
+  el("incTotal").textContent = rupiah(totalIncidental());
+  el("incList").innerHTML = state.insidental.length ? state.insidental.map((ev,idx)=>{
+    const buka = ui.buka.has(ev.id);
+    return `<article class="ev" style="animation-delay:${idx*60}ms">
+      <div class="ev-top">
+        <div><h3>${esc(ev.nama)}</h3>
+          <p class="ev-meta">📅 ${tglIndo(ev.tanggal)} · ${rupiah(ev.nominal)} per warga</p></div>
+        <button class="icon-btn" data-act="ev-del" data-id="${ev.id}" title="Hapus kegiatan">✕</button>
+      </div>
+      <div class="ev-prog">
+        <div class="bar" style="flex:1"><div class="fill" style="width:${ev.dibayar.length/TOTAL_WARGA*100}%"></div></div>
+        <div class="ev-angka"><b>${ev.dibayar.length}/${TOTAL_WARGA}</b> · ${rupiah(ev.dibayar.length*ev.nominal)}</div>
+      </div>
+      <button class="btn small ghost ev-toggle ${buka?"open":""}" data-act="ev-buka" data-id="${ev.id}">
+        ${buka ? "▲ Tutup daftar setoran" : "▼ Tandai setoran warga"}</button>
+      <div class="ev-body" ${buka?"":"hidden"}>
+        ${state.warga.map(w=>{
+          const p = ev.dibayar.includes(w.no);
+          return `<button class="evchip ${p?"on":""}" data-act="ev-pay" data-id="${ev.id}" data-no="${w.no}"><b>${pad(w.no)}</b> ${esc(w.nama)}</button>`;
+        }).join("")}
+      </div>
+    </article>`;
+  }).join("") : `<div class="kosong">Belum ada iuran insidental.<br>Catat kegiatan pertama lewat formulir di atas.</div>`;
+}
+function renderKas(){
+  if(document.activeElement!==el("kasBulan")) el("kasBulan").value = ui.bulan;
+  const t=ui.tahun, b=ui.bulan;
+  const manual = state.transaksi.filter(x=>(x.tanggal||"").slice(0,7)===ym(t,b));
+  const auto = [];
+  const rN = (state.rutin[t]?.[b]||[]).length;
+  if(rN>0) auto.push({ tanggal:`${ym(t,b)}-${akhirBulan(t,b)}`, auto:true,
+    uraian:`Iuran rutin ${BULAN[b]} ${t} (${rN} warga)`, jenis:"masuk", nominal:rN*state.tarifRutin });
+  state.insidental.forEach(e=>{
+    if((e.tanggal||"").slice(0,7)===ym(t,b) && e.dibayar.length>0)
+      auto.push({ tanggal:e.tanggal, auto:true,
+        uraian:`Iuran insidental: ${e.nama} (${e.dibayar.length} warga)`, jenis:"masuk", nominal:e.dibayar.length*e.nominal });
+  });
+  const rows = [...manual, ...auto].sort((a,c)=> a.tanggal<c.tanggal?-1 : a.tanggal>c.tanggal?1:0);
+  let saldo = saldoSebelum(t,b); const awal = saldo; let tIn=0, tOut=0;
+  const body = rows.map(r=>{
+    const isIn = r.jenis==="masuk";
+    saldo += isIn ? r.nominal : -r.nominal;
+    if(isIn) tIn+=r.nominal; else tOut+=r.nominal;
+    return `<tr class="${r.auto?"auto":""}">
+      <td>${tglIndo(r.tanggal)}</td>
+      <td>${esc(r.uraian)}${r.auto ? '<span class="tag">otomatis</span>' : ` <button class="icon-btn" data-act="trx-del" data-id="${r.id}" title="Hapus transaksi">✕</button>`}</td>
+      <td class="num in">${isIn?rupiah(r.nominal):""}</td>
+      <td class="num out">${isIn?"":rupiah(r.nominal)}</td>
+      <td class="num saldo">${rupiah(saldo)}</td></tr>`;
+  }).join("");
+  el("kasTable").innerHTML = `
+    <thead><tr><th>Tanggal</th><th>Uraian / Rincian</th><th style="text-align:right">Pemasukan</th>
+      <th style="text-align:right">Pengeluaran</th><th style="text-align:right">Saldo</th></tr></thead>
+    <tbody>
+      <tr class="awal"><td></td><td>Saldo awal ${BULAN[b]} ${t}</td><td></td><td></td><td class="num saldo">${rupiah(awal)}</td></tr>
+      ${body || `<tr><td colspan="5" class="kosong-cell">Belum ada transaksi pada bulan ini.</td></tr>`}
+    </tbody>
+    <tfoot><tr><td colspan="2">TOTAL ${BULAN[b].toUpperCase()} ${t}</td>
+      <td class="num in">${rupiah(tIn)}</td><td class="num out">${rupiah(tOut)}</td>
+      <td class="num saldo">${rupiah(awal+tIn-tOut)}</td></tr></tfoot>`;
+}
+function renderLaporan(){
+  el("lapTahun").textContent = ui.tahun;
+  el("lapTgl").textContent = kini.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+  if(document.activeElement!==el("saldoAwalInput")) el("saldoAwalInput").value = state.saldoAwal||0;
+  const t = ui.tahun;
+  let saldo = saldoSebelum(t,0); const awalTahun = saldo;
+  let tR=0,tI=0,tL=0,tM=0,tK=0;
+  const rows = BULAN.map((nama,b)=>{
+    const h = penghasilanBulan(t,b), k = pengeluaranBulan(t,b);
+    const a = saldo; saldo += h.total - k;
+    tR+=h.rutin; tI+=h.inc; tL+=h.lain; tM+=h.total; tK+=k;
+    const isKini = (t===kini.getFullYear() && b===kini.getMonth());
+    return `<tr class="${isKini?"kini":""}">
+      <td>${nama}${isKini?' <span class="tag">bulan ini</span>':""}</td>
+      <td class="num">${rupiah(a)}</td>
+      <td class="num">${h.rutin?rupiah(h.rutin):"—"}</td>
+      <td class="num">${h.inc?rupiah(h.inc):"—"}</td>
+      <td class="num">${h.lain?rupiah(h.lain):"—"}</td>
+      <td class="num in">${rupiah(h.total)}</td>
+      <td class="num out">${k?rupiah(k):"—"}</td>
+      <td class="num saldo strong">${rupiah(saldo)}</td></tr>`;
+  }).join("");
+  el("lapTable").innerHTML = `
+    <thead><tr><th>Bulan</th><th style="text-align:right">Saldo Awal</th><th style="text-align:right">Iuran Rutin</th>
+      <th style="text-align:right">Iuran Insidental</th><th style="text-align:right">Masuk Lainnya</th>
+      <th style="text-align:right">Total Masuk</th><th style="text-align:right">Pengeluaran</th>
+      <th style="text-align:right">Saldo Akhir</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td>JUMLAH ${t}</td><td class="num">${rupiah(awalTahun)}</td>
+      <td class="num">${rupiah(tR)}</td><td class="num">${rupiah(tI)}</td><td class="num">${rupiah(tL)}</td>
+      <td class="num in">${rupiah(tM)}</td><td class="num out">${rupiah(tK)}</td>
+      <td class="num saldo">${rupiah(saldo)}</td></tr></tfoot>`;
+}
+function renderRekap(){
+  el("rekapTahun").textContent = ui.tahun;
+  el("printTahun").textContent = ui.tahun;
+  el("printTgl").textContent = kini.toLocaleDateString("id-ID",{day:"numeric",month:"long",year:"numeric"});
+  let tB=0,tR=0,tI=0;
+  const rows = state.warga.map(w=>{
+    const r = rekapWarga(w.no); tB+=r.bln; tR+=r.rutin; tI+=r.inc;
+    return `<tr><td>${pad(w.no)}</td><td>${esc(w.nama)}</td>
+      <td class="num">${r.bln} bln</td><td class="num">${rupiah(r.rutin)}</td>
+      <td class="num">${rupiah(r.inc)}</td><td class="num strong">${rupiah(r.total)}</td></tr>`;
+  }).join("");
+  el("rekapTable").innerHTML = `
+    <thead><tr><th>No</th><th>Nama Warga</th><th style="text-align:right">Rutin ${ui.tahun}</th>
+      <th style="text-align:right">Nominal Rutin</th><th style="text-align:right">Insidental</th>
+      <th style="text-align:right">Total</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td colspan="2">JUMLAH</td><td class="num">${tB} bln</td>
+      <td class="num">${rupiah(tR)}</td><td class="num">${rupiah(tI)}</td><td class="num strong">${rupiah(tR+tI)}</td></tr></tfoot>`;
+}
+function renderAll(){ renderStats(); renderWarga(); renderRutin(); renderIncidental(); renderKas(); renderLaporan(); renderRekap(); }
+function pindahTab(t, scroll=true){
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("active", b.dataset.tab===t));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active", p.id==="panel-"+t));
+  if(scroll) window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ================= AKSI ================= */
+document.addEventListener("click", e=>{
+  const t = e.target.closest("[data-act]");
+  if(!t) return;
+  const act = t.dataset.act;
+
+  if(act==="tab") pindahTab(t.dataset.tab);
+  if(act==="pilih-bulan"){ ui.bulan=+t.dataset.b; renderRutin(); renderKas(); }
+  if(act==="year-prev" || act==="year-next"){
+    ui.tahun += act==="year-prev" ? -1 : 1;
+    renderRutin(); renderKas(); renderLaporan(); renderRekap();
+  }
+  if(act==="sub-rutin"){ ui.sub=t.dataset.sub; renderRutin(); }
+  if(act==="jenis"){
+    kasJenis = t.dataset.j;
+    document.querySelectorAll(".jbtn").forEach(x=>x.classList.toggle("on", x.dataset.j===kasJenis));
+  }
+
+  if(act==="toggle-rutin"){
+    const b = t.dataset.b!==undefined ? +t.dataset.b : ui.bulan, no = +t.dataset.no;
+    setLunas(ui.tahun, b, no, !lunas(ui.tahun,b,no));
+    simpan(); renderRutin(); renderKas(); renderLaporan(); renderStats(); renderRekap();
+    const p = lunas(ui.tahun,b,no);
+    toast(`${p?"✓":"✕"} No. ${pad(no)} ${state.warga[no-1].nama} — ${BULAN[b]} ${ui.tahun} ${p?"lunas":"dibatalkan"}`);
+  }
+  if(act==="all-paid"){
+    for(let no=1; no<=TOTAL_WARGA; no++) setLunas(ui.tahun, ui.bulan, no, true);
+    simpan(); renderRutin(); renderKas(); renderLaporan(); renderStats(); renderRekap();
+    toast(`✓ ${BULAN[ui.bulan]} ${ui.tahun} dilunaskan untuk semua warga`);
+  }
+  if(act==="all-unpaid"){
+    confirmModal("Kosongkan bulan ini?",
+      `Semua catatan pembayaran ${BULAN[ui.bulan]} ${ui.tahun} akan dihapus.`,
+      "Ya, kosongkan", ()=>{
+        if(state.rutin[ui.tahun]) state.rutin[ui.tahun][ui.bulan] = [];
+        simpan(); renderRutin(); renderKas(); renderLaporan(); renderStats(); renderRekap(); toast("Bulan dikosongkan");
+      });
+  }
+
+  if(act==="ev-buka"){
+    const id = +t.dataset.id;
+    ui.buka.has(id) ? ui.buka.delete(id) : ui.buka.add(id);
+    renderIncidental();
+  }
+  if(act==="ev-pay"){
+    const ev = state.insidental.find(x=>x.id===+t.dataset.id), no = +t.dataset.no;
+    const i = ev.dibayar.indexOf(no);
+    i>-1 ? ev.dibayar.splice(i,1) : ev.dibayar.push(no);
+    simpan(); renderIncidental(); renderKas(); renderLaporan(); renderStats(); renderRekap();
+  }
+  if(act==="ev-del"){
+    const id = +t.dataset.id, ev = state.insidental.find(x=>x.id===id);
+    confirmModal("Hapus kegiatan?",
+      `Catatan "${ev.nama}" beserta daftar setorannya akan dihapus permanen.`,
+      "Ya, hapus", ()=>{
+        state.insidental = state.insidental.filter(x=>x.id!==id);
+        ui.buka.delete(id); simpan(); renderIncidental(); renderKas(); renderLaporan(); renderStats(); renderRekap();
+        toast("Kegiatan dihapus");
+      });
+  }
+
+  if(act==="trx-del"){
+    const id = +t.dataset.id, x = state.transaksi.find(z=>z.id===id);
+    confirmModal("Hapus transaksi?",
+      `"${x?x.uraian:""}" akan dihapus dari buku kas dan laporan.`,
+      "Ya, hapus", ()=>{
+        state.transaksi = state.transaksi.filter(z=>z.id!==id);
+        simpan(); renderKas(); renderLaporan(); renderStats(); toast("Transaksi dihapus");
+      });
+  }
+
+  if(act==="sync-save"){
+    syncCfg.url = el("syncUrl").value.trim();
+    saveSyncCfg(); perbaruiStatusSync();
+    if(syncCfg.url){ toast("✓ URL disimpan — mencoba kirim…"); kirimKeSheet(true); }
+    else toast("URL dikosongkan — sinkronisasi nonaktif");
+  }
+  if(act==="sync-kirim") kirimKeSheet(true);
+  if(act==="sync-tes") tesKoneksi();
+  if(act==="sync-ambil") ambilDariSheet();
+  if(act==="copy-script"){
+    const kode = el("scriptCode").value.trim();
+    if(navigator.clipboard){
+      navigator.clipboard.writeText(kode).then(()=>toast("✓ Kode Apps Script v4 disalin"))
+        .catch(()=>{ el("scriptCode").select(); document.execCommand("copy"); toast("✓ Kode disalin"); });
+    } else { el("scriptCode").select(); document.execCommand("copy"); toast("✓ Kode disalin"); }
+  }
+
+  if(act==="export-csv") exportCSV();
+  if(act==="export-json"){
+    unduh(new Blob([JSON.stringify(state,null,2)],{type:"application/json"}), "cadangan-kas-warga.json");
+    toast("💾 Berkas cadangan diunduh");
+  }
+  if(act==="print") window.print();
+  if(act==="reset"){
+    confirmModal("Reset semua data?",
+      "Seluruh data warga, iuran, transaksi kas, dan saldo akan dikembalikan ke kondisi awal (Sheet juga diperbarui).",
+      "Ya, reset", ()=>{
+        localStorage.removeItem(KEY); state = stateBaru(); simpan();
+        ui.buka.clear(); renderAll(); toast("Data direset ke kondisi awal");
+      });
+  }
+});
+
+document.addEventListener("input", e=>{
+  if(e.target.classList.contains("wnama")){
+    state.warga[+e.target.dataset.no-1].nama = e.target.value; simpan();
+  }
+  if(e.target.id==="cariWarga"){
+    const q = e.target.value.toLowerCase();
+    document.querySelectorAll(".wrow").forEach(r=>{
+      const nama = r.querySelector(".wnama").value.toLowerCase();
+      r.style.display = (!q || nama.includes(q)) ? "" : "none";
+    });
+  }
+});
+document.addEventListener("keydown", e=>{
+  if(e.target.classList.contains("wnama") && e.key==="Enter") e.target.blur();
+});
+
+el("tarifInput").addEventListener("change", e=>{
+  const v = Math.max(0, angka(e.target.value));
+  state.tarifRutin = v; e.target.value = v; simpan();
+  renderRutin(); renderKas(); renderLaporan(); renderStats(); renderRekap();
+  toast("Tarif iuran rutin diperbarui: " + rupiah(v) + "/bulan");
+});
+el("kasBulan").addEventListener("change", e=>{
+  ui.bulan = +e.target.value;
+  renderKas(); renderRutin();
+});
+el("kasForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const uraian = el("kasUraian").value.trim();
+  const nominal = angka(el("kasNominal").value);
+  const tanggal = el("kasTanggal").value || isoLocal(new Date());
+  if(!uraian){ toast("Uraian transaksi wajib diisi","err"); return; }
+  if(nominal<=0){ toast("Nominal tidak valid","err"); return; }
+  state.transaksi.push({ id:Date.now(), tanggal, uraian, jenis:kasJenis, nominal });
+  simpan(); el("kasUraian").value=""; el("kasNominal").value="";
+  const y = +tanggal.slice(0,4), m = +tanggal.slice(5,7)-1;
+  if(y>1900){ ui.tahun=y; ui.bulan=m; }
+  renderKas(); renderLaporan(); renderStats(); renderRutin();
+  toast(`${kasJenis==="masuk"?"＋ Pemasukan":"－ Pengeluaran"} "${uraian}" dicatat`);
+});
+el("saldoAwalInput").addEventListener("change", e=>{
+  state.saldoAwal = Math.max(0, angka(e.target.value));
+  e.target.value = state.saldoAwal; simpan();
+  renderKas(); renderLaporan(); renderStats();
+  toast("Saldo awal diperbarui: " + rupiah(state.saldoAwal));
+});
+el("syncAuto").addEventListener("change", e=>{
+  syncCfg.auto = e.target.checked; saveSyncCfg(); perbaruiStatusSync();
+  toast(syncCfg.auto ? "☁ Sinkron otomatis AKTIF" : "Sinkron otomatis dimatikan (kirim manual)");
+});
+el("syncMode").addEventListener("change", e=>{
+  syncCfg.mode = e.target.checked ? "kompatibel" : "normal";
+  saveSyncCfg(); perbaruiStatusSync();
+  toast(syncCfg.mode==="kompatibel" ? "Mode Kompatibel AKTIF" : "Mode normal aktif");
+});
+el("formInc").addEventListener("submit", e=>{
+  e.preventDefault();
+  const nama = el("incNama").value.trim();
+  const nominal = angka(el("incNominal").value);
+  if(!nama){ toast("Nama kegiatan wajib diisi","err"); return; }
+  if(nominal<=0){ toast("Nominal tidak valid","err"); return; }
+  state.insidental.unshift({ id:Date.now(), nama, nominal,
+    tanggal: el("incTanggal").value || isoLocal(new Date()), dibayar:[] });
+  simpan(); el("incNama").value="";
+  renderIncidental(); renderKas(); renderLaporan(); renderStats(); renderRekap();
+  toast(`📣 Kegiatan "${nama}" dicatat — silakan tandai setoran warga`);
+});
+el("importFile").addEventListener("change", e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const s = JSON.parse(r.result);
+      if(!Array.isArray(s.warga) || s.warga.length!==TOTAL_WARGA) throw 0;
+      s.transaksi = s.transaksi||[]; s.saldoAwal = s.saldoAwal||0;
+      state = s; simpan(); ui.buka.clear(); renderAll(); toast("✓ Cadangan berhasil dimuat");
+    }catch(err){ toast("Berkas cadangan tidak valid","err"); }
+  };
+  r.readAsText(f); e.target.value = "";
+});
+
+/* ================= UTILITAS ================= */
+let toastTimer;
+function toast(msg, jenis){
+  const n = el("toast"); n.innerHTML = msg; n.className = "show " + (jenis||"");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=>n.className="", 3200);
+}
+let onYes = null;
+function confirmModal(judul, pesan, label, cb){
+  el("mJudul").textContent = judul; el("mPesan").textContent = pesan;
+  el("mYes").textContent = label; onYes = cb; el("modal").hidden = false;
+}
+el("mYes").onclick = ()=>{ el("modal").hidden = true; onYes && onYes(); };
+el("mNo").onclick  = ()=> el("modal").hidden = true;
+el("modal").addEventListener("click", e=>{ if(e.target===el("modal")) el("modal").hidden = true; });
+function unduh(blob, nama){
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = nama; a.click();
+  URL.revokeObjectURL(a.href);
+}
+function exportCSV(){
+  const rows = [["No","Nama Warga","Rutin Terbayar (bulan)","Nominal Rutin (Rp)","Insidental (Rp)","Total (Rp)"]];
+  state.warga.forEach(w=>{
+    const r = rekapWarga(w.no);
+    rows.push([w.no, w.nama, r.bln, r.rutin, r.inc, r.total]);
+  });
+  const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(";")).join("\r\n");
+  unduh(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}), `rekap-iuran-${ui.tahun}.csv`);
+  toast("⬇ Rekap CSV diunduh");
+}
+
+/* ================= INISIALISASI ================= */
+el("todayLabel").textContent = new Intl.DateTimeFormat("id-ID",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(kini);
+el("incTanggal").value = isoLocal(kini);
+el("kasTanggal").value = isoLocal(kini);
+el("kasBulan").innerHTML = BULAN.map((n,i)=>`<option value="${i}">${n}</option>`).join("");
+el("syncUrl").value = syncCfg.url;
+el("syncAuto").checked = syncCfg.auto;
+el("syncMode").checked = syncCfg.mode === "kompatibel";
+renderAll();
+perbaruiStatusSync();
+</script>
+</body>
+</html>
